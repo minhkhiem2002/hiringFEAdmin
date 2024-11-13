@@ -9,7 +9,12 @@ function MenuSideBar({ props }) {
   const navigate = useNavigate();
   const location = useLocation(); 
   const [activePath, setActivePath] = useState(""); 
-  const menuItems = menuData['qlgm'] || []; 
+  const [menuItems, setMenuItems] = useState([])
+
+  useEffect(() => {
+    let role = sessionStorage.getItem("role");
+    setMenuItems(menuData(role))
+  },[])
 
   const handleClick = (path) => {
     setActivePath(path); 

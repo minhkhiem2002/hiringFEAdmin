@@ -196,7 +196,8 @@ const AddModal = ({ openAddModal, setOpenAddModal }) => {
               <Grid container spacing={2} key={index} className="mt-2">
                 <Grid item xs={4}>
                   <TextField
-                    label="Start Time"
+                    label="Thời gian bắt đầu"
+                    placeholder='Thời gian bắt đầu'
                     type="time"
                     fullWidth
                     value={priceSlot.StartTime}
@@ -205,7 +206,8 @@ const AddModal = ({ openAddModal, setOpenAddModal }) => {
                 </Grid>
                 <Grid item xs={4}>
                   <TextField
-                    label="End Time"
+                    label="Thời gian kết thúc"
+                    placeholder='Thời gian kết thúc'
                     type="time"
                     fullWidth
                     value={priceSlot.EndTime}

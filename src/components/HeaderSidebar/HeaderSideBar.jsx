@@ -79,10 +79,6 @@ function HeaderSideBar({ setExpanded, expanded }) {
   const doimatkhau = () => {
     setOpenDrawerMatKhau(true);
   };
-  const chuyenPhanhe = () => {
-    sessionStorage.setItem("phanhe", null);
-    navigate("/phanhe");
-  };
 
   const handleExpand = () => {
     setExpanded(!expanded);
@@ -188,18 +184,6 @@ function HeaderSideBar({ setExpanded, expanded }) {
               className="mr-2"
             />
             Đổi mật khẩu
-          </div>
-        </MenuItem>
-
-        <MenuItem onClick={chuyenPhanhe}>
-          <div className='w-full flex py-1'>
-            <img
-              src={ChangeIcon}
-              alt="icon_menu_change"
-              width={20}
-              className="mr-2"
-            />
-            Chuyển phần mềm
           </div>
         </MenuItem>
         <Divider />

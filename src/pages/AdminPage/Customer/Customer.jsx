@@ -20,9 +20,6 @@ import {
 } from "devextreme-react/data-grid";
 import "devextreme/dist/css/dx.light.css";
 import { Grid } from "@mui/material";
-import AddModal from "./ModalCustomer/AddModal";
-import EditModal from "./ModalCustomer/EditModal";
-import DeleteModal from "./ModalCustomer/DeleteModal";
 import { useDispatch, useSelector } from "react-redux";
 import Loading from "../../../components/Loading/loading";
 import { getCustomerRequest } from "../../../redux/actions/Admin/customerActions";
@@ -298,7 +295,7 @@ function CustomerManage() {
               <div style={{ height: "83.6vh" }}>{memoizedDataGrid}</div>
             </Grid>
           </Grid>
-          <EditModal
+          {/* <EditModal
             openEditModal={openEditModal}
             setOpenEditModal={setOpenEditModal}
             infoDetail={infoDetail}
@@ -311,7 +308,7 @@ function CustomerManage() {
             openDeleteModal={openDeleteModal}
             infoDetail={infoDetail}
             setOpenDeleteModal={setOpenDeleteModal}
-          />
+          /> */}
         </>
       ) : (
         <Loading />

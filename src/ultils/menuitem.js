@@ -34,12 +34,23 @@ import ProductIcon from '../assets/icons/Product.svg'
 import MapIcon from '../assets/icons/Map Marker.svg'
 import ThreePeopleIcon from '../assets/icons/Three People.svg'
 
-const menuData = {
-  qlgm: [
-    { text: "Quản lý khách hàng", icon: ThreePeopleIcon, path: "managecustomer" },
-    { text: "Quản lý chủ sân", icon: ThreePeopleIcon, path: "manageowner" },
-    { text: "Quản lý sân", icon: ThreePeopleIcon, path: "managefields" },
-  ],
+const menuData = (role) => {
+  const dataMenu = {
+    qlgm: [
+    ],
+  }
+  if (role && role =='Admin') {
+    dataMenu.qlgm.push(
+      { text: "Quản lý khách hàng", icon: ThreePeopleIcon, path: "managecustomer" }
+    )
+    dataMenu.qlgm.push(
+      { text: "Quản lý chủ sân", icon: ThreePeopleIcon, path: "manageowner" }
+    )
+    dataMenu.qlgm.push(
+      { text: "Quản lý sân", icon: ThreePeopleIcon, path: "managefields" }
+    )
+  }
+  return dataMenu['qlgm']
 };
 
 export default menuData;
