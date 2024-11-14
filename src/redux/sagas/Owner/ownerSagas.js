@@ -19,33 +19,29 @@ function* getFieldsOwner(action) {
     yield put(getFieldsOwnerFailure());
   }
 }
-function postFieldsOwnerApi(data, token){
-  return axios.post(sportUrl + `DmBps/Post`, data, {
-    headers: {
-          'Authorization': `Bearer ${token}`,
+function postFieldsOwnerApi(data) {
+
+  return axios.post(
+    `https://sportappdemo.azurewebsites.net/api/SportField/CreateSportField`,
+    data,
+    {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
     }
-});
+  );
 }
+
 function* postFieldsOwner(action){
   try {
     const { data } = action.payload;
-    const iddkdn = sessionStorage.getItem('iddkdn');
-    const token = sessionStorage.getItem('token');
-    if (!iddkdn || !token) {
-      throw new Error('iddkdn và token không hợp lệ');
-    }
-    const response = yield call(postFieldsOwnerApi, data , token);
+    const response = yield call(postFieldsOwnerApi, data);
     if(response.status == 200){
       toast.success("Thêm thành công !", {
         autoClose: 1000,
       });
       yield put(postFieldsOwnerSuccess());
-      const responseFieldsOwner = yield call(getFieldsOwnerApi, iddkdn, token);
-      if(responseFieldsOwner.status == 200){
-        yield put(getFieldsOwnerSuccess(responseFieldsOwner.data.data));
-      }
     }
-
   } catch (error) {
     toast.error("Thêm không thành công!", {
       autoClose: 1000,

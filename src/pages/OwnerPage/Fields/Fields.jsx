@@ -3,6 +3,8 @@ import { Container, TextField, Button, Grid, Card, CardContent, Typography, Pagi
 import AddModal from './ModalFields/AddModal';
 import { useDispatch, useSelector } from 'react-redux';
 import { getFieldsOwnerRequest } from '../../../redux/actions/Owner/fieldsActions';
+import DeleteModal from './ModalFields/DeleteModal';
+import EditModal from './ModalFields/EditModal';
 
 function Fields() {
   const ITEMS_PER_PAGE = 9;
@@ -15,12 +17,15 @@ function Fields() {
   const [currentPage, setCurrentPage] = useState(1);
   const [showResults, setShowResults] = useState(false);
   const [openAddModal, setOpenAddModal] = useState(false);
+  const [openEditModal, setOpenEditModal] = useState(false);
+  const [openDeleteModal, setOpenDeleteModal] = useState(false);
+  const [infoDetail, setInfoDetail] = useState(''); 
 
-  const { data, isLoading, isSuccess, isError } = useSelector(state => state.fieldsOwner);
+  const { data} = useSelector(state => state.fieldsOwner);
 
   const dispatch = useDispatch();
   useEffect(() => {
-    dispatch(getFieldsOwnerRequest('891CB101-17C2-443A-1809-08DCF8338458'));
+    dispatch(getFieldsOwnerRequest(sessionStorage.getItem('userRoleId')));
   }, [dispatch]);
 
   useEffect(() => {
@@ -47,6 +52,16 @@ function Fields() {
     setCurrentPage(1);
     setShowResults(true);
   };
+
+  const handleDelete = (field) => {
+    setInfoDetail(field)
+    setOpenDeleteModal(true)
+  }
+
+  const handleEdit = (field) => {
+    setInfoDetail(field)
+    setOpenEditModal(true)
+  }
 
   return (
     <Container className='w-full bg-white pt-5 rounded-md h-[calc(100vh-80px)]'>
@@ -111,8 +126,8 @@ function Fields() {
                 </Grid>
               </CardContent>
               <CardActions className='flex justify-between'>
-                <Button size="small"  variant="outlined">Chỉnh sửa</Button>
-                <Button size="small" variant="outlined" color="error">Xóa</Button>
+                <Button size="small"  variant="outlined" onClick={() => handleEdit(field)}>Chỉnh sửa</Button>
+                <Button size="small" variant="outlined" color="error" onClick={() => handleDelete(field)}>Xóa</Button>
               </CardActions>
             </Card>
           </Grid>
@@ -129,6 +144,8 @@ function Fields() {
       </Grid>
 
       <AddModal openAddModal={openAddModal} setOpenAddModal={setOpenAddModal} />
+      <EditModal openEditModal={openEditModal} setOpenEditModal={setOpenEditModal} infoDetail={infoDetail}/> 
+      <DeleteModal openDeleteModal={openDeleteModal} setOpenDeleteModal={setOpenDeleteModal} infoDetail={infoDetail}/>
     </Container>
   );
 }

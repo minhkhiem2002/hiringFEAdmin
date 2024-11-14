@@ -17,6 +17,7 @@ import CloseIcon from '@mui/icons-material/Close';
 import { styled } from '@mui/material/styles';
 import { useDispatch, useSelector } from 'react-redux';
 import { getSportTypeRequest } from '../../../../redux/actions/Filter/typeSportActions';
+import { postFieldsOwnerRequest } from '../../../../redux/actions/Owner/fieldsActions';
 
 const BootstrapDialog = styled(Dialog)(({ theme }) => ({
   '& .MuiDialogContent-root': {
@@ -34,11 +35,10 @@ const BootstrapDialog = styled(Dialog)(({ theme }) => ({
 const AddModal = ({ openAddModal, setOpenAddModal }) => {
   const [formData, setFormData] = useState({
     Name: '',
-    Sport: '',
     Address: '',
+    Sport: '',
     Description: '',
     FieldTypeId: '',
-    OwnerId: '',
     Images: [],
     Prices: [],
   });
@@ -110,15 +110,32 @@ const AddModal = ({ openAddModal, setOpenAddModal }) => {
       return;
     }
   
-    // Convert Prices array to a string
-    setFormData((prevData) => ({
-      ...prevData,
-      Prices: JSON.stringify(formData.Prices), 
-    }));
+    const formDataToSubmit = new FormData();
   
-    console.log('Form data submitted:', formData);
+    // Append non-file fields
+    formDataToSubmit.append('Name', formData.Name);
+    formDataToSubmit.append('Sport', formData.Sport);
+    formDataToSubmit.append('Address', formData.Address);
+    formDataToSubmit.append('Description', formData.Description);
+    formDataToSubmit.append('FieldTypeId', formData.FieldTypeId);
+    formDataToSubmit.append('OwnerId', sessionStorage.getItem('userRoleId'));
+    formDataToSubmit.append('StartTime', "0");
+    formDataToSubmit.append('EndTime', "24");
+  
+    formData.Images.forEach((image) => {
+      formDataToSubmit.append('Images', image);
+    });
+  
+    formDataToSubmit.append('Prices', JSON.stringify(formData.Prices));
+  
+    console.log('Form data to submit:', formDataToSubmit);
+
+    dispatch(postFieldsOwnerRequest(formDataToSubmit));
+    
     setOpenAddModal(false);
   };
+  
+  
   
 
   return (
@@ -158,7 +175,7 @@ const AddModal = ({ openAddModal, setOpenAddModal }) => {
             </div>
           </Grid>
 
-          {['Name', 'Sport', 'Address', 'Description', 'OwnerId'].map((field) => (
+          {['Name','Sport' ,'Address', 'Description'].map((field) => (
             <Grid item xs={12} key={field}>
               <TextField
                 label={field}
@@ -196,8 +213,7 @@ const AddModal = ({ openAddModal, setOpenAddModal }) => {
               <Grid container spacing={2} key={index} className="mt-2">
                 <Grid item xs={4}>
                   <TextField
-                    label="Thời gian bắt đầu"
-                    placeholder='Thời gian bắt đầu'
+                    label="Start Time"
                     type="time"
                     fullWidth
                     value={priceSlot.StartTime}
@@ -206,8 +222,7 @@ const AddModal = ({ openAddModal, setOpenAddModal }) => {
                 </Grid>
                 <Grid item xs={4}>
                   <TextField
-                    label="Thời gian kết thúc"
-                    placeholder='Thời gian kết thúc'
+                    label="End Time"
                     type="time"
                     fullWidth
                     value={priceSlot.EndTime}

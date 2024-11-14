@@ -50,6 +50,11 @@ const menuData = (role) => {
       { text: "Quản lý sân", icon: ThreePeopleIcon, path: "managefields" }
     )
   }
+  if (role && role =='Owner') {
+    dataMenu.qlgm.push(
+      { text: "Quản lý sân", icon: ThreePeopleIcon, path: "managefields" }
+    )
+  }
   return dataMenu['qlgm']
 };
 
