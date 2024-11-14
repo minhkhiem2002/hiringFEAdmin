@@ -54,10 +54,17 @@ function* login(action) {
       sessionStorage.setItem("role", response.data.role);
       yield put(loginSuccess(response.data));
     } else {
-      yield put(loginFailure(response.data.error));
+      console.log(response)
+      yield put(loginFailure(response.data.message));
+      toast.error(response.data.message, {
+        autoClose: 1000,
+      });
     }
   } catch (e) {
     yield put(loginFailure(e.message || "Server is not responding"));
+    toast.error(e.message, {
+      autoClose: 1000,
+    });
   }
 }
 
