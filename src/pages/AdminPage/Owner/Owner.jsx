@@ -20,9 +20,9 @@ import {
 } from "devextreme-react/data-grid";
 import "devextreme/dist/css/dx.light.css";
 import { Grid } from "@mui/material";
-// import AddModal from "./ModalOwner/AddModal";
-// import EditModal from "./ModalOwner/EditModal";
-// import DeleteModal from "./ModalOwner/DeleteModal";
+import AddModal from "./ModalOwner/AddModal";
+import EditModal from "./ModalOwner/EditModal";
+import DeleteModal from "./ModalOwner/DeleteModal";
 import { useDispatch, useSelector } from "react-redux";
 import Loading from "../../../components/Loading/loading";
 import { getOwnerRequest } from "../../../redux/actions/Admin/ownerActions";
@@ -43,7 +43,7 @@ function OwnerManage() {
   const { data, addSuccess, editSuccess, deleteSuccess, isLoading } =
     useSelector((state) => state.getAllOwner);
 
-    console.log(data)
+    console.log('Add',addSuccess)
   useEffect(() => {
     dispatch(getOwnerRequest());
     setInfoDetail(null);
@@ -62,30 +62,6 @@ function OwnerManage() {
   useEffect(() => {
     if (addSuccess || editSuccess || deleteSuccess) {
       dispatch(getOwnerRequest());
-    }
-    if (addSuccess == true) {
-      sessionStorage.setItem(
-        "danhmucStorageKey",
-        JSON.stringify({ selectedRowKeys: [data.Idplcm] })
-      );
-    }
-    if (editSuccess == true && infoDetailShow != null) {
-      sessionStorage.setItem(
-        "danhmucStorageKey",
-        JSON.stringify({
-          selectedRowKeys: [infoDetailShow.Idplcm],
-          pageIndex: page,
-        })
-      );
-    }
-    if (deleteSuccess == true && infoDetailShow != null) {
-      sessionStorage.setItem(
-        "danhmucStorageKey",
-        JSON.stringify({
-          selectedRowKeys: [infoDetailShow.Idplcm],
-          pageIndex: page,
-        })
-      );
     }
   }, [addSuccess, editSuccess, deleteSuccess, dispatch]);
 
@@ -307,6 +283,20 @@ function OwnerManage() {
             infoDetail={infoDetail}
             setOpenDeleteModal={setOpenDeleteModal}
           /> */}
+          <EditModal
+            openEditModal={openEditModal}
+            setOpenEditModal={setOpenEditModal}
+            ownerData={infoDetail}
+          />
+          <AddModal
+            openAddModal={openAddModal}
+            setOpenAddModal={setOpenAddModal}
+          />
+          <DeleteModal
+            openDeleteModal={openDeleteModal}
+            infoDetail={infoDetail}
+            setOpenDeleteModal={setOpenDeleteModal}
+          /> 
         </>
       ) : (
         <Loading />

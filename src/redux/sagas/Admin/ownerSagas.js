@@ -1,6 +1,6 @@
 import axios from "axios";
 import { call, put, takeLatest } from "redux-saga/effects";
-import { DELETE_OWNER_REQUEST, deleteOwnerFailure, GET_OWNER_REQUEST, getOwnerFailure, getOwnerSuccess, POST_OWNER_REQUEST, postOwnerFailure, postOwnerSuccess, PUT_OWNER_REQUEST, putOwnerFailure, putOwnerSuccess } from "../../actions/Admin/ownerActions";
+import { DELETE_OWNER_REQUEST, deleteOwnerFailure, deleteOwnerSuccess, GET_OWNER_REQUEST, getOwnerFailure, getOwnerSuccess, POST_OWNER_REQUEST, postOwnerFailure, postOwnerSuccess, PUT_OWNER_REQUEST, putOwnerFailure, putOwnerSuccess } from "../../actions/Admin/ownerActions";
 import { sportUrl } from "../../const_api";
 import { toast } from "react-toastify";
 
@@ -17,31 +17,18 @@ function* getOwner() {
     yield put(getOwnerFailure());
   }
 }
-function postOwnerApi(data, token){
-  return axios.post(sportUrl + `DmBps/Post`, data, {
-    headers: {
-          'Authorization': `Bearer ${token}`,
-    }
-});
+function postOwnerApi(data){
+  return axios.post('https://sportappdemo.azurewebsites.net/api/User/CreateUser', data);
 }
 function* postOwner(action){
   try {
     const { data } = action.payload;
-    const iddkdn = sessionStorage.getItem('iddkdn');
-    const token = sessionStorage.getItem('token');
-    if (!iddkdn || !token) {
-      throw new Error('iddkdn và token không hợp lệ');
-    }
-    const response = yield call(postOwnerApi, data , token);
+    const response = yield call(postOwnerApi, data);
     if(response.status == 200){
       toast.success("Thêm thành công !", {
         autoClose: 1000,
       });
       yield put(postOwnerSuccess());
-      const responseOwner = yield call(getOwnerApi, iddkdn, token);
-      if(responseOwner.status == 200){
-        yield put(getOwnerSuccess(responseOwner.data.data));
-      }
     }
 
   } catch (error) {
@@ -52,35 +39,28 @@ function* postOwner(action){
   }
 }
 
-function deleteOwnerApi(data ,token){
-  return axios.delete(sportUrl + `DmBps/Delete`, {
-    headers: {
-          'Authorization': `Bearer ${token}`,
-    },
-   data
-});
+function deleteOwnerApi(data){
+  return axios.delete(sportUrl + `Owner/DeleteOwner`, {
+    data
+ });
 }
 function* deleteOwner(action){
   try {
     const keyDelete = action.payload;
-    const iddkdn = sessionStorage.getItem('iddkdn');
-    const token = sessionStorage.getItem('token');
-    if (!iddkdn || !token) {
-      throw new Error('iddkdn và token không hợp lệ');
+    const data = {
+      ownerId:keyDelete
     }
-    const response = yield call(deleteOwnerApi, keyDelete, token);
+    const response = yield call(deleteOwnerApi, data);
     if(response.status == 200){
       toast.success("Xóa hành công !", {
         autoClose: 1000,
       });
-      const responseOwner = yield call(getOwnerApi, iddkdn, token);
-      if(responseOwner.status == 200){
-        yield put(getOwnerSuccess(responseOwner.data.data));
-      }
+      yield put(deleteOwnerSuccess()); 
     }else{
       toast.error("Xóa không thành công !", {
         autoClose: 1000,
       });
+      yield put(deleteOwnerFailure()); 
     }
   } catch (error) {
     toast.error("Xóa không thành công!", {
@@ -90,31 +70,18 @@ function* deleteOwner(action){
   }
 }
 
-function putOwnerApi(data, token){
-  return axios.put(sportUrl + `DmBps/Put`, data, {
-    headers: {
-          'Authorization': `Bearer ${token}`,
-    }
-  });
+function putOwnerApi(data){
+  return axios.put(sportUrl + `Owner/UpdateOwner`, data);
 }
 function* putOwner(action){
   try {
     const { data } = action.payload;
-    const iddkdn = sessionStorage.getItem('iddkdn');
-    const token = sessionStorage.getItem('token');
-    if (!iddkdn || !token) {
-      throw new Error('iddkdn và token không hợp lệ');
-    }
-    const response = yield call(putOwnerApi, data , token);
+    const response = yield call(putOwnerApi, data);
     if(response.status == 200){
       toast.success("Chỉnh sửa thành công!", {
         autoClose: 1000,
       });
       yield put(putOwnerSuccess());
-      const responseOwner = yield call(getOwnerApi, iddkdn, token);
-      if(responseOwner.status == 200){
-        yield put(getOwnerSuccess(responseOwner.data.data));
-      }
     }
   } catch (error) {
     toast.error("Chỉnh sửa không thành công!", {

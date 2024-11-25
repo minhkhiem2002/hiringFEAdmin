@@ -1,6 +1,6 @@
 import axios from "axios";
 import { call, put, takeLatest } from "redux-saga/effects";
-import { DELETE_CUSTOMER_REQUEST, deleteCustomerFailure, GET_CUSTOMER_REQUEST, getCustomerFailure, getCustomerSuccess, POST_CUSTOMER_REQUEST, postCustomerFailure, postCustomerSuccess, PUT_CUSTOMER_REQUEST, putCustomerFailure, putCustomerSuccess } from "../../actions/Admin/customerActions";
+import { DELETE_CUSTOMER_REQUEST, deleteCustomerFailure, deleteCustomerSuccess, GET_CUSTOMER_REQUEST, getCustomerFailure, getCustomerSuccess, POST_CUSTOMER_REQUEST, postCustomerFailure, postCustomerSuccess, PUT_CUSTOMER_REQUEST, putCustomerFailure, putCustomerSuccess } from "../../actions/Admin/customerActions";
 import { sportUrl } from "../../const_api";
 import { toast } from "react-toastify";
 
@@ -17,31 +17,18 @@ function* getCustomer() {
     yield put(getCustomerFailure());
   }
 }
-function postCustomerApi(data, token){
-  return axios.post(sportUrl + `DmBps/Post`, data, {
-    headers: {
-          'Authorization': `Bearer ${token}`,
-    }
-});
+function postCustomerApi(data){
+  return axios.post('https://sportappdemo.azurewebsites.net/api/User/CreateUser', data);
 }
 function* postCustomer(action){
   try {
     const { data } = action.payload;
-    const iddkdn = sessionStorage.getItem('iddkdn');
-    const token = sessionStorage.getItem('token');
-    if (!iddkdn || !token) {
-      throw new Error('iddkdn và token không hợp lệ');
-    }
-    const response = yield call(postCustomerApi, data , token);
+    const response = yield call(postCustomerApi, data);
     if(response.status == 200){
       toast.success("Thêm thành công !", {
         autoClose: 1000,
       });
       yield put(postCustomerSuccess());
-      const responseCustomer = yield call(getCustomerApi, iddkdn, token);
-      if(responseCustomer.status == 200){
-        yield put(getCustomerSuccess(responseCustomer.data.data));
-      }
     }
 
   } catch (error) {
@@ -52,37 +39,31 @@ function* postCustomer(action){
   }
 }
 
-function deleteCustomerApi(data ,token){
-  return axios.delete(sportUrl + `DmBps/Delete`, {
-    headers: {
-          'Authorization': `Bearer ${token}`,
-    },
+function deleteCustomerApi(data ){
+  return axios.delete(sportUrl + `Customer/DeleteCustomer`, {
    data
 });
 }
 function* deleteCustomer(action){
   try {
     const keyDelete = action.payload;
-    const iddkdn = sessionStorage.getItem('iddkdn');
-    const token = sessionStorage.getItem('token');
-    if (!iddkdn || !token) {
-      throw new Error('iddkdn và token không hợp lệ');
+    const data = {
+      customerId:keyDelete
     }
-    const response = yield call(deleteCustomerApi, keyDelete, token);
+    const response = yield call(deleteCustomerApi, data);
     if(response.status == 200){
-      toast.success("Xóa hành công !", {
+      toast.success("Xóa thành công !", {
         autoClose: 1000,
       });
-      const responseCustomer = yield call(getCustomerApi, iddkdn, token);
-      if(responseCustomer.status == 200){
-        yield put(getCustomerSuccess(responseCustomer.data.data));
-      }
+      yield put(deleteCustomerSuccess());
     }else{
       toast.error("Xóa không thành công !", {
         autoClose: 1000,
       });
+      yield put(deleteCustomerFailure()); 
     }
   } catch (error) {
+    console.log('Error',error)
     toast.error("Xóa không thành công!", {
       autoClose: 1000,
     });
@@ -90,31 +71,18 @@ function* deleteCustomer(action){
   }
 }
 
-function putCustomerApi(data, token){
-  return axios.put(sportUrl + `DmBps/Put`, data, {
-    headers: {
-          'Authorization': `Bearer ${token}`,
-    }
-  });
+function putCustomerApi(data){
+  return axios.put(sportUrl + `Customer/UpdateCustomer`, data);
 }
 function* putCustomer(action){
   try {
     const { data } = action.payload;
-    const iddkdn = sessionStorage.getItem('iddkdn');
-    const token = sessionStorage.getItem('token');
-    if (!iddkdn || !token) {
-      throw new Error('iddkdn và token không hợp lệ');
-    }
-    const response = yield call(putCustomerApi, data , token);
+    const response = yield call(putCustomerApi, data);
     if(response.status == 200){
       toast.success("Chỉnh sửa thành công!", {
         autoClose: 1000,
       });
       yield put(putCustomerSuccess());
-      const responseCustomer = yield call(getCustomerApi, iddkdn, token);
-      if(responseCustomer.status == 200){
-        yield put(getCustomerSuccess(responseCustomer.data.data));
-      }
     }
   } catch (error) {
     toast.error("Chỉnh sửa không thành công!", {

@@ -23,6 +23,8 @@ import { Grid } from "@mui/material";
 import { useDispatch, useSelector } from "react-redux";
 import Loading from "../../../components/Loading/loading";
 import { getCustomerRequest } from "../../../redux/actions/Admin/customerActions";
+import DeleteModal from './ModalCustomer/DeleteModal'
+import AddModal from "./ModalCustomer/AddModal";
 
 const allowedPageSizes = [5, 10, 15, 20];
 
@@ -157,6 +159,7 @@ function CustomerManage() {
         columnAutoWidth
         showColumnLines
         onSelectionChanged={onSelectionChanged}
+        onToolbarPreparing={handleToolbarPreparing}
         onRowRemoving={handleDeleteClick}
         scrolling={{ mode: "standard" }}
         noDataText="Không có dữ liệu để hiển thị"
@@ -309,6 +312,15 @@ function CustomerManage() {
             infoDetail={infoDetail}
             setOpenDeleteModal={setOpenDeleteModal}
           /> */}
+          <AddModal
+            openAddModal={openAddModal}
+            setOpenAddModal={setOpenAddModal}
+          />
+          <DeleteModal
+            openDeleteModal={openDeleteModal}
+            infoDetail={infoDetail}
+            setOpenDeleteModal={setOpenDeleteModal}
+          />
         </>
       ) : (
         <Loading />

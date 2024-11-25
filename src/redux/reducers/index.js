@@ -5,6 +5,7 @@ import CustomerReducer from "./Admin/customerReducer";
 import OwnerReducer from "./Admin/ownerReducer";
 import FieldsOwnerReducer from "./Owner/fieldsReducer";
 import SportTypeReducer from "./Filter/typeSportReducer";
+import VoucherReducer from "./Owner/voucherReducer";
 
 const rootReducer = combineReducers({
   // Đăng nhập
@@ -18,6 +19,7 @@ const rootReducer = combineReducers({
   getAllOwner: OwnerReducer,
   fieldsOwner: FieldsOwnerReducer,
   filterSportType: SportTypeReducer,
+  voucher: VoucherReducer,
 });
 
 export default rootReducer;
