@@ -4,10 +4,7 @@ import CardSoLuongSanPhamDichVu from "./CardSoLuongSanPhamDichVu/CardSoLuongSanP
 import CardDuBaoDoanhSo from "./CardDuBaoDoanhSo/CardDuBaoDoanhSo";
 import CardSoLuongDiaDanh from "./CardSoLuongDiaDanh/CardSoLuongDiaDanh";
 import CardDuBaoKhachHang from "./CardDuBaoKhachHang/CardDuBaoKhachHang";
-import ListBoPhan from "./ListBoPhan/listbophan"
-import ChartDuBaoDoanhSo from "./ChartDuBaoDoanhSo/ChartDuBaoDoanhSo";
-import ChartDuBaoDoanhThu from "./ChartDuBaoDoanhThu/ChartDuBaoDoanhThu";
-import PhanCapBoPhan from "./PhanCapBoPhan/PhanCapBoPhan";
+
 const DashBoard = () => {
     useEffect(() => {
         document.title = "DTSoft";
@@ -30,15 +27,15 @@ const DashBoard = () => {
                     </Grid>
                 </Grid>
                 <Grid container spacing={2} item xs = {12}>
-                  <Grid item xs={6}>
+                  {/* <Grid item xs={6}>
                      <PhanCapBoPhan/>
                     </Grid>
                     <Grid item xs={6}>
                        <ChartDuBaoDoanhThu/>
-                    </Grid>
+                    </Grid> */}
                 </Grid>
                 <Grid item xs = {12}>
-                    <ChartDuBaoDoanhSo/>
+                    {/* <ChartDuBaoDoanhSo/> */}
                 </Grid>
             </Grid>
         </div>

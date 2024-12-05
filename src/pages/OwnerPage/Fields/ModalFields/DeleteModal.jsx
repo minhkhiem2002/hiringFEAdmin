@@ -4,6 +4,8 @@ import CloseIcon from "@mui/icons-material/Close";
 
 import { styled } from "@mui/material/styles";
 import { useDispatch,useSelector } from "react-redux";
+import { deleteFieldsOwnerRequest } from '../../../../redux/actions/Owner/fieldsActions';
+
 const BootstrapDialog = styled(Dialog)(({ theme }) => ({
   "& .MuiDialogContent-root": {
     padding: theme.spacing(2),
@@ -18,14 +20,16 @@ const BootstrapDialog = styled(Dialog)(({ theme }) => ({
 }));
 function DeleteModal(props) {
   let { openDeleteModal, setOpenDeleteModal, infoDetail } = props;
+  
+  const { dataDetail } = useSelector(state => state.fieldsOwner);
+  
   const dispatch = useDispatch();
 
   let hidePopup = () => {
     setOpenDeleteModal(false);
   };
   const handleDelete = () => {
-    const formData = new FormData();
-    formData.append("key", JSON.stringify(infoDetail));
+    dispatch(deleteFieldsOwnerRequest(dataDetail.id))
     setOpenDeleteModal(false);
   };
 

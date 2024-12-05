@@ -3,24 +3,13 @@ import LayerIcon from "../../../assets/icons/WarningIcon.svg";
 import { Tooltip } from "devextreme-react";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { filterSanPhamDichVuRequest } from "../../../redux/actions/QLGM/TraCuu_KetXuatActions/FilterActions";
 import CardboardBox from '../../../assets/icons/CardboardBox.svg';
 const CardSoLuongSanPhamDichVu = () => {
   const [listData, setListData] = useState(null);
   const [total, setTotal] = useState(0);
   const [dataChange, setDataChange] = useState(null);
-  const { data }= useSelector((state) => state.sanphamdichvu);
   const dispatch = useDispatch();
-  useEffect(() => {
-        dispatch(filterSanPhamDichVuRequest());
-  },[]);
-  
-  useEffect(() => {
-    if(data){
-        setListData(data?.data);
-        setTotal(data?.data?.length);
-    }
-  },[data]);
+
 
   return (
     <div className="w-full h-28 border rounded-[3px] shadow-md px-3 py-1">
@@ -51,7 +40,7 @@ const CardSoLuongSanPhamDichVu = () => {
         </Grid>
         <Grid item xs={12} className="justify-start">
           <div className="w-full flex">
-            <p className="text-2xl font-bold text-slate-500">{total}</p>
+            <p className="text-2xl font-bold text-slate-500">200</p>
           </div>
         </Grid>
       </Grid>

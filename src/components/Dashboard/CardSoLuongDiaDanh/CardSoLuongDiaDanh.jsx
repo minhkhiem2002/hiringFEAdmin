@@ -3,24 +3,12 @@ import LayerIcon from '../../../assets/icons/WarningIcon.svg'
 import { Tooltip } from "devextreme-react";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { getDanhMucDiaDanhQLGMRequest } from "../../../redux/actions/QLGM/NhapDanhMucActions/NhapDMDD_QLGMActions";
 import PlaceMarker from '../../../assets/icons/PlaceMarker.svg';
 const CardSoLuongDiaDanh = () => {
   const [listData, setListData] = useState(null);
   const [total, setTotal] = useState(0);
   const dispatch = useDispatch();
-  const { data }= useSelector((state) => state.nhapdanhmucDMDD_QLGM);
-  useEffect(() => {
-    if(!data){
-      dispatch(getDanhMucDiaDanhQLGMRequest());
-    }
-  },[]);
-  useEffect(() => {
-     if(data){
-       setListData(data?.data);
-       setTotal(data?.data.length)
-     }
-  },[data])
+ 
     return (
         <div className="w-full h-28 border rounded-[3px] shadow-md px-3 py-1">
         <Grid container spacing={1} className="py-2">
@@ -50,10 +38,10 @@ const CardSoLuongDiaDanh = () => {
           </Grid>
           <Grid item xs={12} className="justify-start">
             <div className="w-full flex">
-              <p className="text-2xl font-bold text-slate-500">{total}</p>
-              {/* <p className="text-green-700 bg-green-200 items-center justify-center h-5 mx-2 rounded-md px-1">
+              <p className="text-2xl font-bold text-slate-500">100</p>
+              <p className="text-green-700 bg-green-200 items-center justify-center h-5 mx-2 rounded-md px-1">
                 ▲50%
-              </p> */}
+              </p>
             </div>
           </Grid>
         </Grid>

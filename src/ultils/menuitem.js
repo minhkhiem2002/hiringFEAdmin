@@ -52,6 +52,9 @@ const menuData = (role) => {
     dataMenu.qlgm.push(
       { text: "Quản lý voucher", icon: ThreePeopleIcon, path: "managevouchers" }
     )
+    dataMenu.qlgm.push(
+      { text: "Quản lý thiết bị", icon: ThreePeopleIcon, path: "product" }
+    )
   }
   if (role && role =='Owner') {
     dataMenu.qlgm.push(
@@ -59,6 +62,9 @@ const menuData = (role) => {
     )
     dataMenu.qlgm.push(
       { text: "Quản lý voucher", icon: ThreePeopleIcon, path: "managevouchers" }
+    )
+    dataMenu.qlgm.push(
+      { text: "Quản lý thiết bị", icon: ThreePeopleIcon, path: "product" }
     )
   }
   return dataMenu['qlgm']

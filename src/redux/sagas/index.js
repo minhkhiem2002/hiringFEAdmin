@@ -7,6 +7,9 @@ import OwnerSagas from "./Admin/ownerSagas";
 import FieldsOwnerSagas from "./Owner/ownerSagas";
 import SportTypeSagas from "./Filter/typeSportSagas";
 import VoucherSagas from "./Owner/voucherSagas";
+import ProductSagas from "./Owner/productSagas";
+import filterProductSaga from "./Owner/FilterProductSagas";
+import dashboardSagas from "./Owner/dashboardSagas";
 
 export default function* rootSaga() {
   yield all([
@@ -18,5 +21,8 @@ export default function* rootSaga() {
     FieldsOwnerSagas(),
     SportTypeSagas(),
     VoucherSagas(),
+    ProductSagas(),
+    filterProductSaga(),
+    dashboardSagas(),
   ]);
 }

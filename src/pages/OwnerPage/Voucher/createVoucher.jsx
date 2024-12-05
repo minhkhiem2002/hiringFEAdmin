@@ -5,7 +5,7 @@ import AddModal from "./ModalVoucher/AddModal";
 import EditModal from "./ModalVoucher/EditModal";
 import { getVoucherRequest } from "../../../redux/actions/Owner/voucherActions";
 import { useDispatch, useSelector } from "react-redux";
-import Loading from "./../../../components/Loading/loading";
+import Loading from "../../../components/Loading/loading";
 import DeleteModal from "./ModalVoucher/DeleteModal";
 
 const CreateVoucher = () => {

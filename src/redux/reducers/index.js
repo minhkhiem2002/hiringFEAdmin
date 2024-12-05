@@ -6,6 +6,9 @@ import OwnerReducer from "./Admin/ownerReducer";
 import FieldsOwnerReducer from "./Owner/fieldsReducer";
 import SportTypeReducer from "./Filter/typeSportReducer";
 import VoucherReducer from "./Owner/voucherReducer";
+import ProductReducer from "./Owner/productReducer";
+import filterProductReducer from "./Owner/FilterProductReducer";
+import dashboardOwnerReducer from "./Owner/dashboardReducer";
 
 const rootReducer = combineReducers({
   // Đăng nhập
@@ -20,6 +23,9 @@ const rootReducer = combineReducers({
   fieldsOwner: FieldsOwnerReducer,
   filterSportType: SportTypeReducer,
   voucher: VoucherReducer,
+  product: ProductReducer,
+  filterProduct: filterProductReducer,
+  dashboardOwner:  dashboardOwnerReducer,
 });
 
 export default rootReducer;

@@ -3,30 +3,11 @@ import LayerIcon from "../../../assets/icons/WarningIcon.svg";
 import { Tooltip } from "devextreme-react";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { getDuBaoKhachHangVaDoanhSoRequest } from "../../../redux/actions/QLGM/DuBaoThiTruongActions/DuBaoKhachHangVaDoanhSoActions";
 import FundAccounting from '../../../assets/icons/FundAccounting.svg';
 const CardDuBaoDoanhSo = () => {
   const [listData, setListData] = useState(null);
   const [total, setTotal] = useState(0);
   const dispatch = useDispatch();
-  const { data }= useSelector((state) => state.nhapDuBaoKhachHangVaDoanhSo_QLGM);
-  useEffect(() => {
-    if(!data){
-      dispatch(getDuBaoKhachHangVaDoanhSoRequest());
-    }
-  },[]);
-  useEffect(() => {
-     if(data){
-       setListData(data?.data);
-       const totalSum = data?.data.reduce((sum, item) => sum + item.DbDs, 0);
-       setTotal(totalSum)
-     }
-  },[data]);
-  const formatNumber = (value) => {
-    if (value == null) return '';
-    return parseFloat(value).toLocaleString('en-US');
-  };
-
   return (
     <div className="w-full h-28 border rounded-[3px] shadow-md px-3 py-1">
       <Grid container spacing={1} className="py-2">
@@ -56,7 +37,7 @@ const CardDuBaoDoanhSo = () => {
         </Grid>
         <Grid item xs={12} className="justify-start">
           <div className="w-full flex">
-            <p className="text-2xl font-bold text-slate-500">{formatNumber(total)} đồng</p>
+            <p className="text-2xl font-bold text-slate-500">20000 đồng</p>
           </div>
         </Grid>
       </Grid>

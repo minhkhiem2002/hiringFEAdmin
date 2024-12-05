@@ -35,6 +35,7 @@ function HeaderSideBar({ setExpanded, expanded }) {
   const [openDrawer, setOpenDrawer] = useState(false);
   const [openDrawerMatKhau, setOpenDrawerMatKhau] = useState(false);
   const { data, isLoading, isSuccess } = useSelector((state) => state.userInfo);
+  const { isUpdateAvatar } = useSelector((state) => state.auth);
   const dispatch = useDispatch();
   const navigate = useNavigate();
   
@@ -42,10 +43,10 @@ function HeaderSideBar({ setExpanded, expanded }) {
   const isMobile = useMediaQuery(theme.breakpoints.down('md')); 
   
   useEffect(() => {
-    if (isSuccess === true) {
+    if (isSuccess === true || isUpdateAvatar ) {
       dispatch(getUserInfoRequest());
     }
-  }, [isSuccess]);
+  }, [isSuccess, isUpdateAvatar]);
 
   useEffect(() => {
     dispatch(getUserInfoRequest());

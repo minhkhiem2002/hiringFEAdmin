@@ -17,6 +17,7 @@ import { Cancel, Save } from "@mui/icons-material";
 import { validate } from "../../ultils";
 import { useDispatch, useSelector } from "react-redux";
 import { putUserInfoRequest } from "../../redux/actions/userInfoActions";
+import { updateAvatarRequest } from "../../redux/actions/authActions";
 
 function Thongtintaikhoan({ openDrawer, setOpenDrawer, toggleDrawer }) {
   const [data, setData] = useState();
@@ -42,13 +43,23 @@ function Thongtintaikhoan({ openDrawer, setOpenDrawer, toggleDrawer }) {
     const files = e.target.files;
     if (files && files[0]) {
       const file = files[0];
+  
+      // Hiển thị ảnh xem trước
       const reader = new FileReader();
       reader.onloadend = () => {
         setImage(reader.result);
       };
       reader.readAsDataURL(file);
+  
+      // Tạo FormData
+      const formData = new FormData();
+      const userId = sessionStorage.getItem("id");
+      formData.append("AvatarUpdate", file);
+      formData.append("UserId", userId);
+      dispatch(updateAvatarRequest(formData));
     }
   };
+  
   const handleSave = async () => {
     const { avatar, ...newData } = data;
     const updatedData = {

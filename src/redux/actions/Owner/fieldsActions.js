@@ -2,6 +2,10 @@ export const GET_FIELDS_OWNER_REQUEST = 'GET_FIELDS_OWNER_REQUEST'
 export const GET_FIELDS_OWNER_SUCCESS = 'GET_FIELDS_OWNER_SUCCESS'
 export const GET_FIELDS_OWNER_FAILURE = 'GET_FIELDS_OWNER_FAILURE'
 
+export const GET_FIELD_DETAIL_OWNER_REQUEST = 'GET_FIELD_DETAIL_OWNER_REQUEST'
+export const GET_FIELD_DETAIL_OWNER_SUCCESS = 'GET_FIELD_DETAIL_OWNER_SUCCESS'
+export const GET_FIELD_DETAIL_OWNER_FAILURE = 'GET_FIELD_DETAIL_OWNER_FAILURE'
+
 export const PUT_FIELDS_OWNER_REQUEST = 'PUT_FIELDS_OWNER_REQUEST'
 export const PUT_FIELDS_OWNER_SUCCESS = 'PUT_FIELDS_OWNER_SUCCESS'
 export const PUT_FIELDS_OWNER_FAILURE = 'PUT_FIELDS_OWNER_FAILURE'
@@ -26,6 +30,21 @@ export const getFieldsOwnerSuccess = (data) => ({
 
 export const getFieldsOwnerFailure = (error) => ({
     type: GET_FIELDS_OWNER_FAILURE,
+    payload: error
+})
+
+export const getFieldDetailOwnerRequest = (endpoint) => ({
+    type: GET_FIELD_DETAIL_OWNER_REQUEST,
+    payload: {endpoint}
+})
+
+export const getFieldDetailOwnerSuccess = (data) => ({
+    type: GET_FIELD_DETAIL_OWNER_SUCCESS,
+    payload: data
+})
+
+export const getFieldDetailOwnerFailure = (error) => ({
+    type: GET_FIELD_DETAIL_OWNER_FAILURE,
     payload: error
 })
 

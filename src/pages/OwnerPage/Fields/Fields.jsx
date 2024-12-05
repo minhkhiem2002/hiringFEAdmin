@@ -1,35 +1,56 @@
 import React, { useState, useEffect } from 'react';
-import { Container, TextField, Button, Grid, Card, CardContent, Typography, Pagination, Select, MenuItem, CardActions } from '@mui/material';
+import {
+  Container,
+  TextField,
+  Grid,
+  Card,
+  CardContent,
+  Typography,
+  Pagination,
+  Select,
+  MenuItem,
+  IconButton,
+  Tooltip,
+} from '@mui/material';
+import { Add, Edit, Delete, LocationOn, SportsSoccer, AttachMoney } from '@mui/icons-material';
 import AddModal from './ModalFields/AddModal';
-import { useDispatch, useSelector } from 'react-redux';
-import { getFieldsOwnerRequest } from '../../../redux/actions/Owner/fieldsActions';
 import DeleteModal from './ModalFields/DeleteModal';
 import EditModal from './ModalFields/EditModal';
+import Loading from '../../../components/Loading/loading';
+import { useDispatch, useSelector } from 'react-redux';
+import { getFieldDetailOwnerRequest, getFieldsOwnerRequest } from '../../../redux/actions/Owner/fieldsActions';
 
 function Fields() {
-  const ITEMS_PER_PAGE = 9;
+  const ITEMS_PER_PAGE = 6;
 
-  // State management
   const [fields, setFields] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedLocation, setSelectedLocation] = useState('');
   const [selectedSport, setSelectedSport] = useState('');
   const [currentPage, setCurrentPage] = useState(1);
-  const [showResults, setShowResults] = useState(false);
   const [openAddModal, setOpenAddModal] = useState(false);
   const [openEditModal, setOpenEditModal] = useState(false);
   const [openDeleteModal, setOpenDeleteModal] = useState(false);
-  const [infoDetail, setInfoDetail] = useState(''); 
+  const [infoDetail, setInfoDetail] = useState('');
 
-  const { data} = useSelector(state => state.fieldsOwner);
+  const { data, isLoading, addSuccess, deleteSuccess, editSuccess } = useSelector(
+    (state) => state.fieldsOwner
+  );
 
   const dispatch = useDispatch();
-  useEffect(() => {
-    dispatch(getFieldsOwnerRequest(sessionStorage.getItem('userRoleId')));
-  }, [dispatch]);
 
   useEffect(() => {
-    if (data) {
+    dispatch(getFieldsOwnerRequest(sessionStorage.getItem('userRoleId')));
+  }, []);
+
+  useEffect(() => {
+    if (addSuccess || editSuccess || deleteSuccess) {
+      dispatch(getFieldsOwnerRequest(sessionStorage.getItem('userRoleId')));
+    }
+  }, [addSuccess, deleteSuccess, editSuccess]);
+
+  useEffect(() => {
+    if (data && Array.isArray(data)) {
       setFields(data);
     }
   }, [data]);
@@ -38,7 +59,6 @@ function Fields() {
     const matchesSearchTerm = field.name.toLowerCase().includes(searchTerm.toLowerCase());
     const matchesLocation = selectedLocation ? field.address.includes(selectedLocation) : true;
     const matchesSport = selectedSport ? field.sport === selectedSport : true;
-
     return matchesSearchTerm && matchesLocation && matchesSport;
   });
 
@@ -48,104 +68,138 @@ function Fields() {
     currentPage * ITEMS_PER_PAGE
   );
 
-  const handleSearch = () => {
-    setCurrentPage(1);
-    setShowResults(true);
+  const handleDelete = (field) => {
+    setInfoDetail(field);
+    dispatch(getFieldDetailOwnerRequest(field.endPoint));
+    setOpenDeleteModal(true);
   };
 
-  const handleDelete = (field) => {
-    setInfoDetail(field)
-    setOpenDeleteModal(true)
-  }
-
   const handleEdit = (field) => {
-    setInfoDetail(field)
-    setOpenEditModal(true)
-  }
+    setInfoDetail(field);
+    dispatch(getFieldDetailOwnerRequest(field.endPoint));
+    setOpenEditModal(true);
+  };
 
   return (
-    <Container className='w-full bg-white pt-5 rounded-md h-[calc(100vh-80px)]'>
-      <Grid container spacing={2} marginBottom={2}>
-        <Grid item xs={12} sm={6}>
-          <TextField
-            label="Search"
-            variant="outlined"
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-            fullWidth
-          />
-        </Grid>
-        <Grid item xs={12} sm={3}>
-          <Select
-            value={selectedLocation}
-            onChange={(e) => setSelectedLocation(e.target.value)}
-            displayEmpty
-            fullWidth
-          >
-            <MenuItem value="">Tất cả địa điểm</MenuItem>
-            <MenuItem value="Quận 10">Quận 10</MenuItem>
-            <MenuItem value="Bình Thạnh">Bình Thạnh</MenuItem>
-          </Select>
-        </Grid>
-        <Grid item xs={12} sm={3}>
-          <Select
-            value={selectedSport}
-            onChange={(e) => setSelectedSport(e.target.value)}
-            displayEmpty
-            fullWidth
-          >
-            <MenuItem value="">Tất cả thể loại</MenuItem>
-            <MenuItem value="Bóng đá">Bóng đá</MenuItem>
-            <MenuItem value="Cầu lông">Cầu lông</MenuItem>
-            <MenuItem value="Bóng chuyền">Bóng chuyền</MenuItem>
-            <MenuItem value="Bóng rổ">Bóng rổ</MenuItem>
-          </Select>
-        </Grid>
-        <Grid item xs={12}>
-          <Button variant="contained" color="primary" onClick={() => setOpenAddModal(true)}>
-            Thêm sân mới
-          </Button>
-        </Grid>
-      </Grid>
+    <Container className="w-full bg-gradient-to-br from-gray-50 via-white to-gray-100 py-6 rounded-xl shadow-lg">
+      {isLoading ? (
+        <Loading />
+      ) : (
+        <>
+          <div className="flex flex-col md:flex-row justify-between items-center gap-4 mb-8">
+            <TextField
+              label="Tìm kiếm sân"
+              variant="outlined"
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              className="w-full md:w-1/3"
+            />
+            <div className="flex w-full md:w-2/3 gap-4">
+              <Select
+                value={selectedLocation}
+                onChange={(e) => setSelectedLocation(e.target.value)}
+                displayEmpty
+                className="flex-grow"
+              >
+                <MenuItem value="">Tất cả địa điểm</MenuItem>
+                <MenuItem value="Quận 1">Quận 1</MenuItem>
+                <MenuItem value="Quận 2">Quận 2</MenuItem>
+                <MenuItem value="Quận 3">Quận 3</MenuItem>
+                <MenuItem value="Quận 4">Quận 4</MenuItem>
+                <MenuItem value="Quận 5">Quận 5</MenuItem>
+              </Select>
+              <Select
+                value={selectedSport}
+                onChange={(e) => setSelectedSport(e.target.value)}
+                displayEmpty
+                className="flex-grow"
+              >
+                <MenuItem value="">Tất cả thể loại</MenuItem>
+                <MenuItem value="Bóng đá">Bóng đá</MenuItem>
+                <MenuItem value="Cầu lông">Cầu lông</MenuItem>
+                <MenuItem value="Bóng chuyền">Bóng chuyền</MenuItem>
+                <MenuItem value="Bóng rổ">Bóng rổ</MenuItem>
+              </Select>
+            </div>
+            <Tooltip title="Thêm sân">
+              <IconButton
+                onClick={() => setOpenAddModal(true)}
+                className="bg-gradient-to-r from-blue-500 to-green-400 text-white p-4 rounded-full shadow-xl hover:shadow-2xl"
+              >
+                <Add fontSize="large" />
+              </IconButton>
+            </Tooltip>
+          </div>
 
-      <Grid container spacing={2}>
-        {paginatedData.map((field) => (
-          <Grid item xs={12} sm={4} key={field.endPoint}>
-            <Card className='shadow-md hover:shadow-xl'>
-              <CardContent>
-                <Grid container>
-                  <Grid item xs = {12}>
-                    <img src={field.pictureUrl} alt={field.name} style={{ width: '100%', height: '200px' }} />
-                  </Grid>
-                  <Grid item xs = {12}>
-                  <Typography variant="h6">{field.name}</Typography>
-                  <Typography color="textSecondary" className='min-h-12'>{field.address}</Typography>
-                  <Typography>{field.sport}</Typography>
-                  <Typography>{field.priceRange}</Typography>
-                  </Grid>
-                </Grid>
-              </CardContent>
-              <CardActions className='flex justify-between'>
-                <Button size="small"  variant="outlined" onClick={() => handleEdit(field)}>Chỉnh sửa</Button>
-                <Button size="small" variant="outlined" color="error" onClick={() => handleDelete(field)}>Xóa</Button>
-              </CardActions>
-            </Card>
+          <Grid container spacing={4}>
+            {paginatedData.map((field) => (
+              <Grid item xs={12} sm={6} md={4} key={field.endPoint}>
+                <Card className="relative overflow-hidden rounded-2xl shadow-xl transition transform hover:scale-105 hover:shadow-2xl bg-gradient-to-b from-blue-100 via-white to-gray-50">
+                  <img
+                    src={field.pictureUrl}
+                    alt={field.name}
+                    className="w-full h-48 object-cover rounded-t-2xl"
+                  />
+                  <CardContent className="p-6">
+                    <Typography variant="h6" className="font-bold text-blue-700 mb-2 truncate">
+                      {field.name}
+                    </Typography>
+                    <div className="flex items-center mb-3 text-gray-600">
+                      <LocationOn fontSize="small" className="mr-2 text-red-500" />
+                      {field.address}
+                    </div>
+                    <div className="flex items-center mb-3 text-green-600">
+                      <SportsSoccer fontSize="small" className="mr-2" />
+                      {field.sport}
+                    </div>
+                    <div className="flex items-center text-blue-600 font-semibold">
+                      <AttachMoney fontSize="small" className="mr-2" />
+                      {field.priceRange}
+                    </div>
+                  </CardContent>
+                  <div className="absolute top-4 right-4 flex space-x-2">
+                    <IconButton
+                      color="primary"
+                      onClick={() => handleEdit(field)}
+                      className="bg-blue-100 hover:bg-blue-200 p-2 rounded-full shadow-lg"
+                    >
+                      <Edit />
+                    </IconButton>
+                    <IconButton
+                      color="error"
+                      onClick={() => handleDelete(field)}
+                      className="bg-red-100 hover:bg-red-200 p-2 rounded-full shadow-lg"
+                    >
+                      <Delete />
+                    </IconButton>
+                  </div>
+                </Card>
+              </Grid>
+            ))}
           </Grid>
-        ))}
-      </Grid>
-      <Grid item xs={12} className='flex justify-center items-center'>
-        <Pagination
-          count={totalPages}
-          page={currentPage}
-          onChange={(_, page) => setCurrentPage(page)}
-          color="primary"
-          sx={{ marginTop: 2 }}
-        />
-      </Grid>
 
-      <AddModal openAddModal={openAddModal} setOpenAddModal={setOpenAddModal} />
-      <EditModal openEditModal={openEditModal} setOpenEditModal={setOpenEditModal} infoDetail={infoDetail}/> 
-      <DeleteModal openDeleteModal={openDeleteModal} setOpenDeleteModal={setOpenDeleteModal} infoDetail={infoDetail}/>
+          <div className="flex justify-center mt-8">
+            <Pagination
+              count={totalPages}
+              page={currentPage}
+              onChange={(_, page) => setCurrentPage(page)}
+              color="primary"
+            />
+          </div>
+
+          <AddModal openAddModal={openAddModal} setOpenAddModal={setOpenAddModal} />
+          <EditModal
+            openEditModal={openEditModal}
+            setOpenEditModal={setOpenEditModal}
+            fieldData={infoDetail}
+          />
+          <DeleteModal
+            openDeleteModal={openDeleteModal}
+            setOpenDeleteModal={setOpenDeleteModal}
+            infoDetail={infoDetail}
+          />
+        </>
+      )}
     </Container>
   );
 }

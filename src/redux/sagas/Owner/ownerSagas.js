@@ -1,6 +1,12 @@
 import axios from "axios";
 import { call, put, takeLatest } from "redux-saga/effects";
-import { DELETE_FIELDS_OWNER_REQUEST, deleteFieldsOwnerFailure, GET_FIELDS_OWNER_REQUEST, getFieldsOwnerFailure, getFieldsOwnerSuccess, POST_FIELDS_OWNER_REQUEST, postFieldsOwnerFailure, postFieldsOwnerSuccess, PUT_FIELDS_OWNER_REQUEST, putFieldsOwnerFailure, putFieldsOwnerSuccess } from "../../actions/Owner/fieldsActions";
+import { 
+  DELETE_FIELDS_OWNER_REQUEST, deleteFieldsOwnerFailure, deleteFieldsOwnerSuccess, 
+  GET_FIELDS_OWNER_REQUEST, getFieldsOwnerFailure, getFieldsOwnerSuccess, 
+  GET_FIELD_DETAIL_OWNER_REQUEST, getFieldDetailOwnerSuccess, getFieldDetailOwnerFailure,
+  POST_FIELDS_OWNER_REQUEST, postFieldsOwnerFailure, postFieldsOwnerSuccess, 
+  PUT_FIELDS_OWNER_REQUEST, putFieldsOwnerFailure, putFieldsOwnerSuccess 
+} from "../../actions/Owner/fieldsActions";
 import { sportUrl } from "../../const_api";
 import { toast } from "react-toastify";
 
@@ -18,6 +24,21 @@ function* getFieldsOwner(action) {
   } catch (error) {
     yield put(getFieldsOwnerFailure());
   }
+}
+
+function getFieldDetailOwnerApi(endpoint) {
+  return axios.get(`https://sportappdemo.azurewebsites.net/api/SportField/GetSportFieldUpdate?EndPoint=${endpoint}`);
+}
+function* getFieldDetailOwner(action) {
+try {
+  const {endpoint} = action.payload;
+  const response = yield call(getFieldDetailOwnerApi,endpoint);
+  if(response.status == 200){
+    yield put(getFieldDetailOwnerSuccess(response.data));
+  }
+} catch (error) {
+  yield put(getFieldDetailOwnerFailure());
+}
 }
 function postFieldsOwnerApi(data) {
 
@@ -50,31 +71,22 @@ function* postFieldsOwner(action){
   }
 }
 
-function deleteFieldsOwnerApi(data ,token){
-  return axios.delete(sportUrl + `DmBps/Delete`, {
-    headers: {
-          'Authorization': `Bearer ${token}`,
-    },
-   data
-});
+function deleteFieldsOwnerApi(data){
+  return axios.delete(sportUrl + `SportField/DeleteSportField`,
+   {data});
 }
 function* deleteFieldsOwner(action){
   try {
     const keyDelete = action.payload;
-    const iddkdn = sessionStorage.getItem('iddkdn');
-    const token = sessionStorage.getItem('token');
-    if (!iddkdn || !token) {
-      throw new Error('iddkdn và token không hợp lệ');
+    const data = {
+      sportFieldId: keyDelete,
     }
-    const response = yield call(deleteFieldsOwnerApi, keyDelete, token);
+    const response = yield call(deleteFieldsOwnerApi, data);
     if(response.status == 200){
       toast.success("Xóa hành công !", {
         autoClose: 1000,
       });
-      const responseFieldsOwner = yield call(getFieldsOwnerApi, iddkdn, token);
-      if(responseFieldsOwner.status == 200){
-        yield put(getFieldsOwnerSuccess(responseFieldsOwner.data.data));
-      }
+        yield put(deleteFieldsOwnerSuccess());
     }else{
       toast.error("Xóa không thành công !", {
         autoClose: 1000,
@@ -88,34 +100,21 @@ function* deleteFieldsOwner(action){
   }
 }
 
-function putFieldsOwnerApi(data, token){
-  return axios.put(sportUrl + `DmBps/Put`, data, {
-    headers: {
-          'Authorization': `Bearer ${token}`,
-    }
-  });
+function putFieldsOwnerApi(data){
+  return axios.patch(sportUrl + `SportField/UpdateSportField`, data);
 }
 function* putFieldsOwner(action){
   try {
     const { data } = action.payload;
-    const iddkdn = sessionStorage.getItem('iddkdn');
-    const token = sessionStorage.getItem('token');
-    if (!iddkdn || !token) {
-      throw new Error('iddkdn và token không hợp lệ');
-    }
-    const response = yield call(putFieldsOwnerApi, data , token);
+    const response = yield call(putFieldsOwnerApi, data);
     if(response.status == 200){
       toast.success("Chỉnh sửa thành công!", {
         autoClose: 1000,
       });
       yield put(putFieldsOwnerSuccess());
-      const responseFieldsOwner = yield call(getFieldsOwnerApi, iddkdn, token);
-      if(responseFieldsOwner.status == 200){
-        yield put(getFieldsOwnerSuccess(responseFieldsOwner.data.data));
-      }
     }
   } catch (error) {
-    toast.error("Chỉnh sửa không thành công!", {
+    toast.error(error.response.data.message || "Chỉnh sửa sân không thành công", {
       autoClose: 1000,
     });
     yield put(putFieldsOwnerFailure());
@@ -124,6 +123,7 @@ function* putFieldsOwner(action){
 
 function* FieldsOwnerSagas(){
    yield takeLatest(GET_FIELDS_OWNER_REQUEST, getFieldsOwner);
+   yield takeLatest(GET_FIELD_DETAIL_OWNER_REQUEST, getFieldDetailOwner);
    yield takeLatest(POST_FIELDS_OWNER_REQUEST, postFieldsOwner);
    yield takeLatest(DELETE_FIELDS_OWNER_REQUEST, deleteFieldsOwner);
    yield takeLatest(PUT_FIELDS_OWNER_REQUEST, putFieldsOwner);

@@ -2,6 +2,9 @@ import {
     GET_FIELDS_OWNER_REQUEST,
     GET_FIELDS_OWNER_SUCCESS,
     GET_FIELDS_OWNER_FAILURE,
+    GET_FIELD_DETAIL_OWNER_REQUEST,
+    GET_FIELD_DETAIL_OWNER_SUCCESS,
+    GET_FIELD_DETAIL_OWNER_FAILURE,
     PUT_FIELDS_OWNER_REQUEST,
     PUT_FIELDS_OWNER_SUCCESS,
     PUT_FIELDS_OWNER_FAILURE,
@@ -15,6 +18,7 @@ import {
   
   const initialState = {
     data: null,
+    dataDetail: null,
     error: null,
     isLoading: false,
     isSuccess : false,
@@ -44,6 +48,24 @@ import {
           isLoading: false,
           isError: true,
         };
+        case GET_FIELD_DETAIL_OWNER_REQUEST:
+          return {
+            ...state,
+            isLoading: true,
+            isError: false,
+          };
+        case GET_FIELD_DETAIL_OWNER_SUCCESS:
+          return {
+            ...state,
+            isLoading: false,
+            dataDetail: action.payload,
+          };
+        case GET_FIELD_DETAIL_OWNER_FAILURE:
+          return {
+            ...state,
+            isLoading: false,
+            isError: true,
+          };
       case PUT_FIELDS_OWNER_REQUEST:
         return {
           ...state,
@@ -60,25 +82,28 @@ import {
         return {
           ...state,
           isLoading: false,
-          editSuccess : true,
+          editSuccess : false,
+          isError: true
         };
       case POST_FIELDS_OWNER_REQUEST:
         return {
           ...state,
           isLoading: false,
+          isError : false,
           addSuccess : false
         };
       case POST_FIELDS_OWNER_SUCCESS:
         return {
           ...state,
-          isLoading: true,
+          isLoading: false,
           addSuccess : true,
         };
       case POST_FIELDS_OWNER_FAILURE:
         return {
           ...state,
           isLoading: false,
-          addSuccess : true,
+          addSuccess : false,
+          isError: true
         };
       case DELETE_FIELDS_OWNER_REQUEST:
         return {
@@ -97,7 +122,8 @@ import {
         return {
           ...state,
           isLoading: false,
-          deleteSuccess : true,
+          deleteSuccess : false,
+          isError: true
         };
       default:
         return state;

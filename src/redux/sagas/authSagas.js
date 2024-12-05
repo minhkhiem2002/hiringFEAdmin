@@ -15,6 +15,8 @@ import {
   logoutSuccess,
   checkUserSuccess,
   checkUserFailure,
+  UPDATE_AVATAR_REQUEST,
+  updateAvatarSuccess, updateAvatarFailure
 } from "../actions/authActions";
 import { toast } from "react-toastify";
 
@@ -239,12 +241,49 @@ function* checkUser(action) {
   }
 }
 
+export const updateAvatarApi = async (data) => {
+  const { AvatarUpdate, UserId } = data;
+  console.log('data',data)
+
+  try {
+    const response = await axios.patch(`https://sportappdemo.azurewebsites.net/api/User/UpdateAvatar`, data,
+      {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      }
+    );
+    return response.data; 
+  } catch (error) {
+    throw new Error(error.response?.data?.message || 'API Error');
+  }
+};
+
+function* handleUpdateAvatar(action) {
+  try {
+    const response = yield call(updateAvatarApi, action.payload);
+    if (response) {
+      toast.success("Đổi avatar thành công!", {
+        autoClose: 1000,
+      });
+      yield put(updateAvatarSuccess(response));
+    }
+  } catch (error) {
+    toast.error(error.message ? error.message : "Đổi avatar không thành công!", {
+      autoClose: 1000,
+    });
+    yield put(updateAvatarFailure(error.message || 'Something went wrong!'));
+  }
+}
+
+
 function* authSagas() {
   yield takeLatest(LOGIN_REQUEST, login);
   yield takeLatest(CHECK_PASSWORD_REQUEST, checkPassword);
   yield takeLatest(CHANGE_PASSWORD_REQUEST, changePassword);
   yield takeLatest(LOG_OUT, logout);
   yield takeLatest(CHECK_USER_REQUEST, checkUser)
+  yield takeLatest(UPDATE_AVATAR_REQUEST, handleUpdateAvatar);
 }
 
 export default authSagas;
