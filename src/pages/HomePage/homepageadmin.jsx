@@ -12,7 +12,14 @@ import {
   Legend,
 } from "chart.js";
 import { useDispatch, useSelector } from "react-redux";
-import { getBookingByOwnerRequest, getCustomersRequest, getRevenueByYearRequest, getRevenueCurrentMonthRequest, getRevenueTodayRequest, getSportFieldsRequest, getTotalRevenueRequest } from "../../redux/actions/Owner/dashboardActions";
+import {
+  getOrdersAdminRequest,
+  getSportProductCountAdminRequest,
+  getTotalRevenueAdminRequest,
+  getRevenueByYearAdminRequest,
+  getRevenueCurrentMonthAdminRequest,
+  getRevenueTodayAdminRequest,
+} from "../../redux/actions/Admin/dashboardActions"; 
 
 ChartJS.register(
   CategoryScale,
@@ -25,13 +32,15 @@ ChartJS.register(
   Legend
 );
 
-const HomePage = () => {
+const AdminHomePage = () => {
   const dispatch = useDispatch();
   useEffect(() => {
     document.title = "Spotta";
   }, []);
-  const { customers, sportFields, totalRevenue, bookings, revenueByYear, revenueCurrentMonth, revenueToday } = useSelector((state) => state.dashboardOwner);
-  const { data, isLoading, isSuccess } = useSelector((state) => state.userInfo);
+  // Admin-specific state
+  const { orders, sportProductCount, totalRevenue, revenueByYear, revenueCurrentMonth, revenueToday } = useSelector((state) => state.dashboardAdmin); // Assuming Redux state is structured for Admin
+  const { data, isLoading, isSuccess } = useSelector((state) => state.userInfo); // Admin user info state
+
   const months = [
     "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"
   ];
@@ -49,13 +58,12 @@ const HomePage = () => {
     ],
   };
 
-  // Doughnut Chart Data
   const doughnutData = {
     labels: ["2024"],
     datasets: [
       {
         label: "Growth",
-        data: [78, 22],
+        data: [78, 22], // Example data for growth
         backgroundColor: ["#10B981", "#E5E7EB"],
         hoverBackgroundColor: ["#10B981", "#F3F4F6"],
         borderWidth: 0,
@@ -67,17 +75,16 @@ const HomePage = () => {
     plugins: {
       legend: { display: false },
     },
-    cutout: "70%", // Tạo hiệu ứng vòng nhỏ hơn
+    cutout: "70%", // Smaller cutout for the doughnut
   };
 
   useEffect(() => {
-    dispatch(getCustomersRequest());
-    dispatch(getSportFieldsRequest());
-    dispatch(getTotalRevenueRequest());
-    dispatch(getRevenueByYearRequest());
-    dispatch(getBookingByOwnerRequest());
-    dispatch(getRevenueCurrentMonthRequest());
-    dispatch(getRevenueTodayRequest());
+    dispatch(getOrdersAdminRequest());
+    dispatch(getSportProductCountAdminRequest());
+    dispatch(getTotalRevenueAdminRequest());
+    dispatch(getRevenueByYearAdminRequest());
+    dispatch(getRevenueCurrentMonthAdminRequest());
+    dispatch(getRevenueTodayAdminRequest());
   }, [dispatch]);
 
   return (
@@ -86,11 +93,10 @@ const HomePage = () => {
       <div className="bg-white p-6 rounded-lg shadow-lg flex justify-between items-center">
         <div>
           <h1 className="text-xl font-bold text-gray-800">
-            Chúc mừng {data?.firstName} {data?.lastName}! 🎉
+            Chào mừng {data?.firstName} {data?.lastName}! 🎉
           </h1>
           <p className="text-gray-600">
-            Bạn đã tăng <span className="text-indigo-600 font-bold">72%</span>{" "}
-            doanh thu hôm nay. Kiểm tra huy hiệu mới của bạn trong hồ sơ.
+            Bạn có <span className="text-indigo-600 font-bold">{orders?.data?.length}</span> đơn hàng mới. Kiểm tra các đơn hàng trong bảng điều khiển.
           </p>
           <button className="mt-4 px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-500">
             Xem hồ sơ
@@ -98,7 +104,7 @@ const HomePage = () => {
         </div>
         <img
           src={data?.avatar}
-          alt="User"
+          alt="Admin"
           className="rounded-full shadow-md w-20 h-20"
         />
       </div>
@@ -109,19 +115,16 @@ const HomePage = () => {
         <div className="lg:col-span-2 space-y-6">
           {/* Total Revenue */}
           <div className="bg-white p-6 rounded-lg shadow-lg">
-            <h2 className="text-gray-800 font-semibold mb-4">Total Revenue</h2>
+            <h2 className="text-gray-800 font-semibold mb-4">Tổng Doanh Thu</h2>
             <Bar data={barData} />
           </div>
-
-          {/* Profile Report */}
-          
         </div>
 
         {/* Right Section */}
         <div className="space-y-6">
-          {/* Doughnut Chart */}
+          {/* Growth Doughnut Chart */}
           <div className="bg-white p-6 rounded-lg shadow-lg flex items-center flex-col">
-            <h2 className="text-gray-800 font-semibold mb-4">Growth</h2>
+            <h2 className="text-gray-800 font-semibold mb-4">Tăng Trưởng</h2>
             <div className="w-32">
               <Doughnut data={doughnutData} options={doughnutOptions} />
             </div>
@@ -129,10 +132,10 @@ const HomePage = () => {
 
           {/* Metrics */}
           <div className="grid grid-cols-2 gap-4">
-            {[{ label: "Khách hàng", value: customers.data, growth: "+72.89%" },
-              { label: "Số lượng sân", value: sportFields.data, growth: "+48.45%" },
-              { label: "Tổng doanh thu", value: totalRevenue.data, growth: "-14.88%" },
-              { label: "Doanh thu tháng", value: revenueCurrentMonth.data, growth: "+28.45%" },
+            {[{ label: "Đơn Hàng", value: orders?.data?.length, growth: "+12.5%" },
+              { label: "Sản Phẩm", value: sportProductCount?.data, growth: "+8.4%" },
+              { label: "Tổng Doanh Thu", value: totalRevenue?.data, growth: "+5.1%" },
+              { label: "Doanh Thu Tháng", value: revenueCurrentMonth?.data, growth: "+2.3%" },
             ].map((item, index) => (
               <div
                 key={index}
@@ -160,4 +163,4 @@ const HomePage = () => {
   );
 };
 
-export default HomePage;
+export default AdminHomePage;

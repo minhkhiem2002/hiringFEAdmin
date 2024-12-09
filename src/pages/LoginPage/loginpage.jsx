@@ -128,7 +128,7 @@ const LoginPage = () => {
                   sx={{ color: "#4590FF", fontWeight: "700" }}
                   className="py-3 w-4/5"
                 >
-                  HỆ THỐNG CÁC ỨNG DỤNG QUẢN LÝ DOANH NGHIỆP
+                  HỆ THỐNG QUẢN LÝ ĐẶT CHỖ CÁC DỊCH VỤ THỂ THAO
                 </Typography>
                 <Box component="form" noValidate className="mt-1">
                   <TextField

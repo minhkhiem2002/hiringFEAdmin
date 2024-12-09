@@ -105,7 +105,7 @@ function HeaderSideBar({ setExpanded, expanded }) {
                   {data.avatar ? (
                     <Avatar
                       className='w-13 h-13'
-                      alt="DTSoft"
+                      alt="Spotta"
                       src={data.avatar}
                     />
                   ) : (

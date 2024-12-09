@@ -10,9 +10,6 @@ import {
   GET_TOTAL_REVENUE_REQUEST,
   getTotalRevenueSuccess,
   getTotalRevenueFailure,
-  GET_BOOKING_BY_OWNER_REQUEST,
-  getBookingByOwnerSuccess,
-  getBookingByOwnerFailure,
   GET_REVENUE_BY_YEAR_REQUEST,
   getRevenueByYearSuccess,
   getRevenueByYearFailure,
@@ -70,20 +67,10 @@ function* fetchTotalRevenueSaga() {
   }
 }
 
-function* fetchBookingsSaga() {
-  try {
-    const OwnerId = getOwnerId();
-    const response = yield call(axios.get, `${BOOKINGS_API}?OwnerId=${OwnerId}&PageSize=9&PageNumber=1`);
-    yield put(getBookingByOwnerSuccess(response.data));
-  } catch (error) {
-    yield put(getBookingByOwnerFailure(error.message));
-  }
-}
-
 function* fetchRevenueByYearSaga() {
   try {
-    const OwnerId = getOwnerId();
-    const response = yield call(axios.get, `${REVENUE_YEAR_API}?OwnerId=${OwnerId}`);
+    const currentYear = new Date().getFullYear(); // Lấy năm hiện tại
+    const response = yield call(axios.get, `${REVENUE_YEAR_API}?Year=${currentYear}`); // Truyền vào năm hiện tại
     yield put(getRevenueByYearSuccess(response.data));
   } catch (error) {
     yield put(getRevenueByYearFailure(error.message));
@@ -115,7 +102,6 @@ export default function* dashboardSagas() {
   yield takeLatest(GET_CUSTOMERS_REQUEST, fetchCustomersSaga);
   yield takeLatest(GET_SPORT_FIELDS_REQUEST, fetchSportFieldsSaga);
   yield takeLatest(GET_TOTAL_REVENUE_REQUEST, fetchTotalRevenueSaga);
-  yield takeLatest(GET_BOOKING_BY_OWNER_REQUEST, fetchBookingsSaga);
   yield takeLatest(GET_REVENUE_BY_YEAR_REQUEST, fetchRevenueByYearSaga);
   yield takeLatest(GET_REVENUE_CURRENT_MONTH_REQUEST, fetchRevenueCurrentMonthSaga);
   yield takeLatest(GET_REVENUE_TODAY_REQUEST, fetchRevenueTodaySaga);

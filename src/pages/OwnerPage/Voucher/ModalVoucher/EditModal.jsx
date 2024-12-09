@@ -29,7 +29,7 @@ const EditModal = ({ open, onClose, voucher }) => {
     if (voucher) {
       setFormData({
         name: voucher.name || "",
-        voucherId: voucher.id,
+        voucherId: voucher.voucherId,
         startTime: voucher.startTime?.slice(0, 10) || "",
         endTime: voucher.endTime?.slice(0, 10) || "",
         quantity: voucher.quantity || 0,

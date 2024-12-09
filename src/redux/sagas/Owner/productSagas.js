@@ -119,13 +119,13 @@ function* postAddColorProduct(action){
 
 
 function deleteProductApi(data){
-  return axios.delete(sportUrl + `Product/DeleteProduct`, {data});
+  return axios.delete(sportUrl + `SportProduct/DeleteSportProduct`, {data});
 }
 function* deleteProduct(action){
   try {
     const keyDelete = action.payload;
     const data = {
-      voucherId: keyDelete
+      sportProductId: keyDelete
     }
     const response = yield call(deleteProductApi, data);
     if(response.status == 200){

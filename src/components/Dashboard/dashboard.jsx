@@ -7,7 +7,7 @@ import CardDuBaoKhachHang from "./CardDuBaoKhachHang/CardDuBaoKhachHang";
 
 const DashBoard = () => {
     useEffect(() => {
-        document.title = "DTSoft";
+        document.title = "Spotta";
       }, []);
     return (
         <div className="bg-white h-fit w-full rounded-[3px] shadow-2xl ml-2 px-4 py-4">

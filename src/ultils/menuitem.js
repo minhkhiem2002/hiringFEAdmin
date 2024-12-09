@@ -44,16 +44,19 @@ const menuData = (role) => {
       { text: "Quản lý khách hàng", icon: ThreePeopleIcon, path: "managecustomer" }
     )
     dataMenu.qlgm.push(
-      { text: "Quản lý chủ sân", icon: ThreePeopleIcon, path: "manageowner" }
+      { text: "Quản lý danh sách đen", icon: ThreePeopleIcon, path: "bancustomer" }
     )
     dataMenu.qlgm.push(
-      { text: "Quản lý sân", icon: ThreePeopleIcon, path: "managefields" }
+      { text: "Quản lý chủ sân", icon: DashboardIcon, path: "manageowner" }
     )
     dataMenu.qlgm.push(
-      { text: "Quản lý voucher", icon: ThreePeopleIcon, path: "managevouchers" }
+      { text: "Quản lý voucher", icon: SecurityFieldIcon, path: "managevouchers" }
     )
     dataMenu.qlgm.push(
-      { text: "Quản lý thiết bị", icon: ThreePeopleIcon, path: "product" }
+      { text: "Quản lý thiết bị", icon: FinanceIcon, path: "product" }
+    )
+    dataMenu.qlgm.push(
+      { text: "Quản lý đơn hàng", icon: BuyIcon, path: "order" }
     )
   }
   if (role && role =='Owner') {
@@ -61,10 +64,10 @@ const menuData = (role) => {
       { text: "Quản lý sân", icon: ThreePeopleIcon, path: "managefields" }
     )
     dataMenu.qlgm.push(
-      { text: "Quản lý voucher", icon: ThreePeopleIcon, path: "managevouchers" }
+      { text: "Quản lý voucher", icon: StallIcon, path: "managevouchers" }
     )
     dataMenu.qlgm.push(
-      { text: "Quản lý thiết bị", icon: ThreePeopleIcon, path: "product" }
+      { text: "Quản lý đặt sân", icon: BuyIcon, path: "booking" }
     )
   }
   return dataMenu['qlgm']

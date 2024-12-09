@@ -10,6 +10,10 @@ import VoucherSagas from "./Owner/voucherSagas";
 import ProductSagas from "./Owner/productSagas";
 import filterProductSaga from "./Owner/FilterProductSagas";
 import dashboardSagas from "./Owner/dashboardSagas";
+import dashboardAdminSagas from "./Admin/dashboardSagas";
+import bookingByOwnerSagas from "./Owner/bookingSagas";
+import orderAdminSagas from "./Admin/orderSagas";
+import BanSagas from "./Admin/banSagas";
 
 export default function* rootSaga() {
   yield all([
@@ -24,5 +28,9 @@ export default function* rootSaga() {
     ProductSagas(),
     filterProductSaga(),
     dashboardSagas(),
+    dashboardAdminSagas(),
+    bookingByOwnerSagas(),
+    orderAdminSagas(),
+    BanSagas(),
   ]);
 }

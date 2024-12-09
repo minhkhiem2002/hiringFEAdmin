@@ -6,6 +6,7 @@ import { getProductRequest } from "../../../redux/actions/Owner/productActions";
 import Loading from "../../../components/Loading/loading";
 import AddModal from "./ModalProductEquipment/AddModal";
 import AddModalColor from "./ModalProductEquipment/AddModalColor";
+import DeleteModal from './ModalProductEquipment/DeleteModal';
 import { fetchColorsRequest, fetchSizesRequest } from "../../../redux/actions/Owner/FilterProductActions";
 
 const ProductEquipment = () => {
@@ -15,8 +16,10 @@ const ProductEquipment = () => {
   const [selectedSize, setSelectedSize] = useState("");
   const [openAddModal, setOpenAddModal] = useState(false);
   const [openAddColorModal, setOpenAddColorModal] = useState(false);
+  const [openDeleteModal, setOpenDeleteModal] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
   const [selectedItem, setSelectedItem] = useState("");
+  const [selectedItemDelete, setSelectedItemDelete] = useState("");
 
   console.log('Size', selectedSize)
   const itemsPerPage = 9;
@@ -63,6 +66,11 @@ const ProductEquipment = () => {
     setSelectedItem(item.sportProductId);
     setOpenAddColorModal(true);
   };
+
+  const handleDeleteProduct = (product) => {
+    setSelectedItemDelete(product)
+    setOpenDeleteModal(true)
+  }
 
   return (
     <div className="container mx-auto p-6">
@@ -150,7 +158,7 @@ const ProductEquipment = () => {
                   <IconButton size="small" color="secondary" onClick={() => handleChangeColor(product)}>
                     <Palette fontSize="small" />
                   </IconButton>
-                  <IconButton size="small" color="error">
+                  <IconButton size="small" color="error" onClick={() => handleDeleteProduct(product)}>
                     <Delete fontSize="small" />
                   </IconButton>
                 </div>
@@ -168,6 +176,7 @@ const ProductEquipment = () => {
       )}
       <AddModal openAddModal={openAddModal} setOpenAddModal={setOpenAddModal} />
       <AddModalColor openAddModal={openAddColorModal} setOpenAddModal={setOpenAddColorModal} id={selectedItem} />
+      <DeleteModal openDeleteModal={openDeleteModal} setOpenDeleteModal={setOpenDeleteModal}  infoDetail = {selectedItemDelete}/>
     </div>
   );
 };
